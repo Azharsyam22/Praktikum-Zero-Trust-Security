@@ -1,0 +1,24 @@
+{
+  "name": "zero-trust-sistem-nilai",
+  "version": "1.0.0",
+  "description": "Zero Trust Security - Sistem Nilai Akademik (NIST SP 800-207)",
+  "author": "Muhammad Azharuddiya Syam Ramadhan - 247006111168",
+  "license": "ISC",
+  "scripts": {
+    "setup": "node scripts/setup-database.js",
+    "seed": "node scripts/seed-data.js",
+    "gateway": "node gateway/server.js",
+    "service-nilai": "node services/nilai/server.js",
+    "service-transkrip": "node services/transkrip/server.js",
+    "dev": "node scripts/dev.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "http-proxy-middleware": "^2.0.6",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.6.5"
+  }
+}

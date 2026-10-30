@@ -1,0 +1,428 @@
+{
+  "info": {
+    "name": "Zero Trust - Sistem Nilai",
+    "description": "API Collection untuk testing sistem nilai dengan arsitektur Zero Trust",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "gateway_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "mahasiswa_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "dosen_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "admin_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "service_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Authentication",
+      "item": [
+        {
+          "name": "Login - Mahasiswa",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('mahasiswa_token', response.accessToken);",
+                  "    console.log('Mahasiswa token saved:', response.accessToken);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "DEVICE-MHS1-001"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"mahasiswa1\",\n  \"password\": \"mhs123\"\n}"
+            },
+            "url": {
+              "raw": "{{gateway_url}}/auth/login",
+              "host": ["{{gateway_url}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Login - Dosen",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('dosen_token', response.accessToken);",
+                  "    console.log('Dosen token saved:', response.accessToken);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "DEVICE-DOSEN1-001"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"dosen1\",\n  \"password\": \"dosen123\"\n}"
+            },
+            "url": {
+              "raw": "{{gateway_url}}/auth/login",
+              "host": ["{{gateway_url}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Login - Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('admin_token', response.accessToken);",
+                  "    console.log('Admin token saved:', response.accessToken);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "DEVICE-ADMIN-001"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": {
+              "raw": "{{gateway_url}}/auth/login",
+              "host": ["{{gateway_url}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Get Service Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('service_token', response.serviceToken);",
+                  "    console.log('Service token saved:', response.serviceToken);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clientId\": \"service-nilai-client\",\n  \"clientSecret\": \"service-client-secret-2024-very-secure\"\n}"
+            },
+            "url": {
+              "raw": "{{gateway_url}}/auth/service",
+              "host": ["{{gateway_url}}"],
+              "path": ["auth", "service"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Nilai - Mahasiswa",
+      "item": [
+        {
+          "name": "Get My Grades",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{mahasiswa_token}}"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "DEVICE-MHS1-001"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway_url}}/nilai",
+              "host": ["{{gateway_url}}"],
+              "path": ["nilai"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Nilai - Dosen",
+      "item": [
+        {
+          "name": "Get Class Grades",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{dosen_token}}"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "DEVICE-DOSEN1-001"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway_url}}/nilai",
+              "host": ["{{gateway_url}}"],
+              "path": ["nilai"]
+            }
+          }
+        },
+        {
+          "name": "Update Grade",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{dosen_token}}"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "DEVICE-DOSEN1-001"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tugas\": 90,\n  \"uts\": 85,\n  \"uas\": 92\n}"
+            },
+            "url": {
+              "raw": "{{gateway_url}}/nilai/1",
+              "host": ["{{gateway_url}}"],
+              "path": ["nilai", "1"]
+            }
+          }
+        },
+        {
+          "name": "Finalize Class",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{dosen_token}}"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "DEVICE-DOSEN1-001"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway_url}}/kelas/1/finalisasi",
+              "host": ["{{gateway_url}}"],
+              "path": ["kelas", "1", "finalisasi"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Transkrip",
+      "item": [
+        {
+          "name": "Get My Transcript (Mahasiswa)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{mahasiswa_token}}"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "DEVICE-MHS1-001"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway_url}}/transkrip/2021001",
+              "host": ["{{gateway_url}}"],
+              "path": ["transkrip", "2021001"]
+            }
+          }
+        },
+        {
+          "name": "Get Any Transcript (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "DEVICE-ADMIN-001"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway_url}}/transkrip/2021002",
+              "host": ["{{gateway_url}}"],
+              "path": ["transkrip", "2021002"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Zero Trust Tests (Should FAIL)",
+      "item": [
+        {
+          "name": "❌ Login Without Device ID",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"mahasiswa1\",\n  \"password\": \"mhs123\"\n}"
+            },
+            "url": {
+              "raw": "{{gateway_url}}/auth/login",
+              "host": ["{{gateway_url}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "❌ Direct Access to Service",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/nilai",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["nilai"]
+            }
+          }
+        },
+        {
+          "name": "❌ Access Without Token",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Device-ID",
+                "value": "DEVICE-MHS1-001"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway_url}}/nilai",
+              "host": ["{{gateway_url}}"],
+              "path": ["nilai"]
+            }
+          }
+        },
+        {
+          "name": "❌ Mahasiswa Update Grade",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{mahasiswa_token}}"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "DEVICE-MHS1-001"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tugas\": 100\n}"
+            },
+            "url": {
+              "raw": "{{gateway_url}}/nilai/1",
+              "host": ["{{gateway_url}}"],
+              "path": ["nilai", "1"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
